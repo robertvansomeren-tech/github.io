@@ -1,2 +1,333 @@
-# github.io
-ismijnlandeenapeland
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is mijn land een apenland?!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Carter+One&family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #facc15;
+            background-image: radial-gradient(circle, #facc15 0%, #a16207 100%);
+            overflow-x: hidden;
+            overflow-y: hidden; /* Prevent scrollbars from falling bananas */
+        }
+
+        h1, h2, h3, .btn-font, .score-label {
+            font-family: 'Carter One', cursive;
+        }
+
+        /* --- Animaties --- */
+        @keyframes swing {
+            0% { transform: rotate(15deg); }
+            100% { transform: rotate(-15deg); }
+        }
+        .swing-monkey {
+            transform-origin: top center;
+            animation: swing 2s infinite ease-in-out alternate;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+        .falling-banana {
+            position: fixed;
+            top: -10%;
+            z-index: 0;
+            pointer-events: none;
+            color: rgba(253, 224, 71, 0.4);
+            animation: fall linear infinite;
+        }
+        .b1 { left: 10%; animation-duration: 7s; animation-delay: 0s; font-size: 2rem; }
+        .b2 { left: 30%; animation-duration: 9s; animation-delay: 2s; font-size: 3rem; }
+        .b3 { left: 70%; animation-duration: 6s; animation-delay: 4s; font-size: 1.5rem; }
+        .b4 { left: 90%; animation-duration: 8s; animation-delay: 1s; font-size: 2.5rem; }
+        .b5 { left: 50%; animation-duration: 10s; animation-delay: 5s; font-size: 2rem; }
+
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .btn-hover:active { transform: scale(0.95); }
+        
+        .jungle-border {
+            border: 4px solid #854d0e;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+        }
+        
+        .rope {
+            height: 60px;
+            width: 2px;
+            background-color: #5c3a12;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            z-index: 20;
+        }
+
+        /* Specifieke stijlen voor de 'plaatjes' (illustraties) */
+        .illustration-container {
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Vaste spelfout gecorrigeerd van 'justify-center' naar 'justify-content: center;' */
+            background: #fef08a; /* yellow-200 */
+            border-bottom: 4px solid #ca8a04;
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 text-gray-800 relative">
+
+    <!-- Achtergrond Animaties -->
+    <i class="fas fa-banana falling-banana b1"></i>
+    <i class="fas fa-banana falling-banana b2"></i>
+    <i class="fas fa-banana falling-banana b3"></i>
+    <i class="fas fa-banana falling-banana b4"></i>
+    <i class="fas fa-banana falling-banana b5"></i>
+
+    <!-- Slingerende Aap -->
+    <div class="fixed top-0 left-1/2 transform -translate-x-1/2 z-50">
+        <div class="rope h-16 w-1 bg-yellow-900 mx-auto"></div>
+        <div class="swing-monkey text-5xl text-yellow-900 mt-14 relative">
+             <i class="fas fa-monkey"></i>
+             <i class="fas fa-banana text-yellow-400 text-lg absolute bottom-0 right-0 transform rotate-45"></i>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="bg-[#fffdf0] rounded-2xl w-full max-w-lg overflow-hidden relative min-h-[550px] flex flex-col jungle-border z-10 mt-10">
+        
+        <!-- Header -->
+        <div class="bg-yellow-500 p-4 border-b-4 border-yellow-700 flex justify-between items-center text-green-900 relative">
+            <h1 class="text-xl md:text-2xl tracking-wider w-full text-center pr-8">Is mijn land een apenland?!</h1>
+            <span id="progress-text" class="text-xs font-bold hidden bg-yellow-800 text-yellow-100 px-2 py-1 rounded absolute right-2 top-4">1/14</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div id="progress-container" class="w-full bg-green-900 h-4 hidden border-b-2 border-yellow-700">
+            <div id="progress-bar" class="bg-yellow-400 h-4 transition-all duration-300 flex items-center justify-end pr-1" style="width: 0%"></div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="p-6 md:p-6 flex-grow flex flex-col relative">
+            
+            <!-- SCHERM 1: Start Scherm -->
+            <div id="start-screen" class="fade-in w-full py-4 text-center h-full flex flex-col justify-center">
+                <div class="mb-4 text-yellow-600 text-8xl relative inline-block mx-auto">
+                    <i class="fas fa-passport text-green-800"></i>
+                    <i class="fas fa-question text-red-600 absolute -top-2 -right-4 text-6xl animate-bounce"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-4 text-green-900 uppercase leading-tight">De Grote Inspectie</h2>
+                <p class="text-gray-700 mb-8 font-semibold">Zijn uw leiders staatsmannen of circusartiesten? Doe de test!</p>
+                <button onclick="startQuiz()" class="btn-hover w-full bg-yellow-500 hover:bg-yellow-400 text-green-900 border-b-4 border-yellow-700 font-bold py-4 rounded-xl transition duration-200 text-2xl btn-font uppercase tracking-widest shadow-lg">
+                    Start Test
+                </button>
+            </div>
+
+            <!-- SCHERM 2: Quiz Vraag Scherm -->
+            <div id="quiz-screen" class="hidden w-full fade-in flex flex-col h-full">
+                
+                <!-- Illustratie Veld (Dynamisch) -->
+                <div id="illustration-area" class="illustration-container w-full rounded-t-lg bg-yellow-200 border-yellow-600 relative overflow-hidden flex justify-center items-center">
+                    <!-- Iconen worden hier geïnjecteerd door JS -->
+                </div>
+
+                <div class="mb-6 min-h-[80px] flex items-center justify-center bg-yellow-100 p-4 rounded-b-lg border-x border-b border-yellow-300 shadow-sm text-center">
+                    <h3 id="question-text" class="text-lg md:text-xl font-bold leading-relaxed text-green-900">
+                        <!-- Vraag komt hier -->
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 w-full mt-auto">
+                    <button onclick="handleAnswer(true)" class="btn-hover flex flex-col items-center justify-center p-4 bg-yellow-400 hover:bg-yellow-300 border-b-4 border-yellow-600 rounded-xl transition duration-200 group">
+                        <i class="fas fa-check text-3xl text-yellow-800 mb-1 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-green-900 font-bold text-xl btn-font uppercase">Ja / Waar</span>
+                    </button>
+                    
+                    <button onclick="handleAnswer(false)" class="btn-hover flex flex-col items-center justify-center p-4 bg-green-700 hover:bg-green-600 border-b-4 border-green-900 rounded-xl transition duration-200 group">
+                        <i class="fas fa-times text-3xl text-green-200 mb-1 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-green-100 font-bold text-xl btn-font uppercase">Nee / Fout</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- SCHERM 3: Resultaat Scherm -->
+            <div id="result-screen" class="hidden w-full fade-in py-2 text-center h-full flex flex-col justify-center">
+                
+                <div class="mb-4 text-6xl relative inline-block mx-auto">
+                    <div id="result-icon-container"></div>
+                </div>
+
+                <h2 id="result-title" class="text-3xl font-bold mb-4 text-green-900 uppercase tracking-wide leading-tight btn-font"></h2>
+                
+                <div class="bg-yellow-200 p-4 rounded-xl border-4 border-yellow-500 border-double mb-6 inline-block w-full shadow-inner">
+                    <p class="text-yellow-900 text-sm font-bold uppercase mb-1">Uw officiële</p>
+                    <p class="text-green-900 font-bold text-3xl score-label">
+                        APENSCORE: <span id="score-percentage" class="text-red-600">0%</span>
+                    </p>
+                    <p class="text-xs text-gray-600 mt-2">(<span id="true-count">0</span> van de 14 vragen bevestigd)</p>
+                </div>
+
+                <button onclick="restartQuiz()" class="btn-hover w-full bg-green-800 hover:bg-green-700 text-yellow-100 border-b-4 border-green-950 font-bold py-3 rounded-xl shadow-lg transition duration-200 btn-font uppercase text-lg">
+                    <i class="fas fa-redo-alt mr-2"></i> Opnieuw Testen
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Data structuur met Vraagtekst en HTML voor de visual
+        const quizData = [
+            {
+                q: "Heeft de president een snor?",
+                visual: `<div class="relative"><i class="fas fa-user-tie text-8xl text-gray-700"></i><div class="absolute bottom-6 left-1/2 transform -translate-x-1/2"><i class="fas fa-yin-yang text-black text-6xl opacity-0"></i><div class="w-24 h-6 bg-black rounded-full absolute top-2 left-1/2 transform -translate-x-1/2 rotate-3 shadow-lg"></div><div class="w-24 h-6 bg-black rounded-full absolute top-2 left-1/2 transform -translate-x-1/2 -rotate-3"></div></div></div>`
+            },
+            {
+                q: "Is mijn dak een golfplaat?",
+                visual: `<div class="relative w-full h-full flex items-center justify-center bg-sky-200"><i class="fas fa-home text-7xl text-yellow-800 mt-8"></i><div class="absolute top-10 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-gray-400 flex rounded"><div class="w-4 h-full bg-gray-300 rounded-full mx-1"></div><div class="w-4 h-full bg-gray-300 rounded-full mx-1"></div><div class="w-4 h-full bg-gray-300 rounded-full mx-1"></div><div class="w-4 h-full bg-gray-300 rounded-full mx-1"></div><div class="w-4 h-full bg-gray-300 rounded-full mx-1"></div></div><div class="absolute top-4 right-10 text-yellow-500 animate-pulse"><i class="fas fa-sun text-4xl"></i></div></div>`
+            },
+            {
+                q: "Werken er meer mensen in de horeca dan dat er gasten zijn?",
+                visual: `<div class="flex items-center justify-center gap-2"><div class="flex flex-col gap-1"><i class="fas fa-user-waiter text-4xl text-black"></i><i class="fas fa-user-waiter text-4xl text-black"></i></div><div class="bg-white p-2 rounded-full border-2 border-dashed border-gray-400"><i class="fas fa-user text-3xl text-blue-500"></i></div><div class="flex flex-col gap-1"><i class="fas fa-user-waiter text-4xl text-black"></i><i class="fas fa-user-waiter text-4xl text-black"></i></div></div>`
+            },
+            {
+                q: "Zijn er 12-jarige kinderen sigaretten aan het verkopen?",
+                visual: `<div class="relative"><i class="fas fa-child text-7xl text-green-700"></i><div class="absolute bottom-0 right-0 bg-red-600 text-white text-xs font-bold px-1 rounded transform rotate-12">TE KOOP</div><div class="absolute top-8 -right-6"><i class="fas fa-smoking text-4xl text-gray-500"></i></div></div>`
+            },
+            {
+                q: "Worden er spullen op straat verkocht door niet-immigranten?",
+                visual: `<div class="flex items-end gap-2"><i class="fas fa-store text-6xl text-orange-700"></i><i class="fas fa-box-open text-3xl text-yellow-900 absolute bottom-4 right-20"></i><i class="fas fa-tshirt text-3xl text-pink-600 absolute bottom-4 left-20"></i></div>`
+            },
+            {
+                q: "Is het mogelijk om meer dan 50% af te dingen?",
+                visual: `<div class="relative"><i class="fas fa-tag text-8xl text-yellow-600 transform -rotate-45"></i><div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-bold text-2xl">-50%</div><i class="fas fa-cut text-4xl text-red-600 absolute -right-2 top-0"></i></div>`
+            },
+            {
+                q: "Rijdt het openbaar vervoer per definitie te laat?",
+                visual: `<div class="relative"><i class="fas fa-bus text-7xl text-blue-600"></i><div class="absolute -top-4 -right-4 bg-white rounded-full p-1 border-2 border-red-500"><i class="fas fa-hourglass-end text-3xl text-red-500 animate-spin-slow"></i></div><div class="absolute bottom-0 -left-6 text-gray-500 text-xl font-bold">Zzz...</div></div>`
+            },
+            {
+                q: "Zijn er straatartiesten bij het stoplicht?",
+                visual: `<div class="flex items-center gap-4"><div class="h-16 w-6 bg-gray-800 rounded-full relative flex flex-col justify-between p-1 border-2 border-white"><div class="w-full h-4 bg-red-500 rounded-full animate-pulse"></div><div class="w-full h-4 bg-yellow-500 rounded-full opacity-30"></div><div class="w-full h-4 bg-green-500 rounded-full opacity-30"></div></div><i class="fas fa-guitar text-6xl text-purple-700 transform rotate-12"></i></div>`
+            },
+            {
+                q: "Zijn er insecten groter dan mijn voet?",
+                visual: `<div class="relative w-full h-full flex items-center justify-center"><i class="fas fa-shoe-prints text-4xl text-gray-400 absolute left-10 bottom-4 transform rotate-90"></i><i class="fas fa-spider text-8xl text-black absolute right-12 animate-bounce"></i><div class="absolute text-red-600 font-bold text-xl top-4 right-4">?!</div></div>`
+            },
+            {
+                q: "Dient de woonkamer ook als slaapkamer?",
+                visual: `<div class="flex items-center justify-center gap-0 bg-white p-2 rounded border-2 border-gray-300"><i class="fas fa-couch text-4xl text-blue-800"></i><span class="text-2xl mx-1">+</span><i class="fas fa-bed text-4xl text-red-800"></i></div>`
+            },
+            {
+                q: "Zijn er zwerfhonden?",
+                visual: `<div class="relative"><i class="fas fa-dog text-7xl text-yellow-900 transform -scale-x-100"></i><div class="absolute -top-4 -left-4 text-2xl animate-pulse">🦴</div><div class="absolute top-0 right-0 text-xl font-bold text-gray-500">Zzz...</div></div>`
+            },
+            {
+                q: "Zitten er mensen achterin een pick-up truck?",
+                visual: `<div class="relative"><i class="fas fa-truck-pickup text-8xl text-blue-700"></i><div class="absolute -top-3 right-5 flex gap-1"><i class="fas fa-user text-xl text-black animate-bounce"></i><i class="fas fa-user text-xl text-black animate-bounce" style="animation-delay:0.1s"></i><i class="fas fa-user text-xl text-black animate-bounce" style="animation-delay:0.2s"></i></div></div>`
+            },
+            {
+                q: "Lopen de electriciteit kabels bovengronds?",
+                visual: `<div class="relative w-full h-full flex items-end justify-center gap-10 px-8"><div class="w-3 h-24 bg-gray-700 relative z-10"></div><div class="w-3 h-24 bg-gray-700 relative z-10"></div><svg class="absolute top-0 left-0 w-full h-full pointer-events-none"><path d="M120 40 Q 180 90 240 40" stroke="black" fill="transparent" stroke-width="3"/><path d="M120 50 Q 180 100 240 50" stroke="black" fill="transparent" stroke-width="3"/><path d="M120 30 Q 180 20 240 30" stroke="black" fill="transparent" stroke-width="3"/></svg><i class="fas fa-bolt text-yellow-500 text-3xl absolute top-2 right-1/4 animate-pulse z-20"></i></div>`
+            },
+            {
+                q: "Lopen de locals op blote voeten?",
+                visual: `<div class="relative"><i class="fas fa-shoe-prints text-6xl text-yellow-800 transform -rotate-90 opacity-70"></i><i class="fas fa-shoe-prints text-6xl text-yellow-800 transform -rotate-90 translate-x-8 translate-y-8 opacity-70"></i></div>`
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let trueAnswersCount = 0;
+
+        // DOM Elementen
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        
+        const questionText = document.getElementById('question-text');
+        const illustrationArea = document.getElementById('illustration-area');
+        
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+        
+        const resultTitle = document.getElementById('result-title');
+        const resultIconContainer = document.getElementById('result-icon-container');
+
+        
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            trueAnswersCount = 0;
+            
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            progressContainer.classList.remove('hidden');
+            progressText.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const data = quizData[currentQuestionIndex];
+            
+            // Set Text
+            questionText.innerText = data.q;
+            
+            // Set Visual HTML
+            illustrationArea.innerHTML = data.visual;
+
+            // Update progress
+            const progress = ((currentQuestionIndex) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            progressText.innerText = `${currentQuestionIndex + 1}/${quizData.length}`;
+            
+            // Animatie reset
+            quizScreen.classList.remove('fade-in');
+            void quizScreen.offsetWidth; 
+            quizScreen.classList.add('fade-in');
+        }
+
+        function handleAnswer(isTrue) {
+            if (isTrue) {
+                trueAnswersCount++;
+            }
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            progressContainer.classList.add('hidden');
+            progressText.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            const percentage = Math.round((trueAnswersCount / quizData.length) * 100);
+            
+            document.getElementById('true-count').innerText = trueAnswersCount;
+            document.getElementById('score-percentage').innerText = `${percentage}%`;
+
+            if (percentage > 50) {
+                // Apenland
+                resultTitle.innerHTML = `<span class="text-red-600 block text-lg mb-1">Gefeliciteerd!</span>Uw land is een<br><span class="text-5xl text-yellow-600" style="text-shadow: 2px 2px #000;">APENLAND</span>`;
+                resultIconContainer.innerHTML = `
+                    <i class="fas fa-crown text-yellow-500 absolute -top-8 left-0 text-5xl transform -rotate-12"></i>
+                    <i class="fas fa-monkey te
